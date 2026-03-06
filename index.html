@@ -1,26 +1,37 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MG FORMA 3D - Impressão 3D e Modelagem</title>
+    <title>MG FORMA 3D - Impressão 3D e Modelagem com IA</title>
     
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <style>
         :root {
-            var(--primary-color): #00e5ff; 
-            --primary-color: #00e5ff;
+            /* Paleta de cores baseada na logo MG FORMA 3D */
+            --primary-color: #00e5ff; /* Azul Ciano Neon */
             --primary-hover: #00b8cc;
-            --dark-color: #0a0a0a;    
+            --dark-color: #0a0a0a;    /* Preto profundo */
             --light-color: #f5f6fa;
             --text-color: #353b48;
             --success-color: #25D366;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
-        body { background-color: var(--light-color); color: var(--text-color); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
 
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+        }
+
+        /* Cabeçalho e Navegação */
         header {
             background-color: var(--dark-color);
             color: white;
@@ -35,12 +46,34 @@
             border-bottom: 2px solid var(--primary-color);
         }
         
-        .logo-img { height: 60px; width: auto; display: block; }
+        .logo-img {
+            height: 60px;
+            width: auto;
+            display: block;
+        }
 
-        nav ul { list-style: none; display: flex; gap: 2rem; align-items: center; }
-        nav a { color: white; text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
-        nav a:hover { color: var(--primary-color); }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
         
+        /* Banner Principal (Hero) */
         .hero {
             text-align: center;
             padding: 5rem 2rem;
@@ -54,8 +87,18 @@
             border-bottom: 5px solid var(--primary-color);
         }
 
-        .hero h2 { font-size: 3rem; margin-bottom: 1rem; color: var(--primary-color); text-shadow: 0 0 10px rgba(0, 229, 255, 0.3); }
-        .hero p { font-size: 1.2rem; margin-bottom: 2.5rem; max-width: 600px; }
+        .hero h2 { 
+            font-size: 3rem; 
+            margin-bottom: 1rem; 
+            color: var(--primary-color); 
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.3); 
+        }
+        
+        .hero p { 
+            font-size: 1.2rem; 
+            margin-bottom: 2.5rem; 
+            max-width: 600px; 
+        }
 
         .btn {
             background-color: var(--primary-color);
@@ -72,9 +115,12 @@
             text-transform: uppercase;
         }
 
-        .btn:hover { background-color: var(--primary-hover); box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); }
+        .btn:hover { 
+            background-color: var(--primary-hover); 
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+        }
 
-        /* NOVA SECÇÃO: Laboratório de IA */
+        /* Laboratório de IA */
         .ia-container {
             max-width: 900px;
             margin: 4rem auto;
@@ -92,7 +138,12 @@
             color: var(--dark-color);
         }
 
-        .ia-container p { text-align: center; color: #718093; margin-bottom: 2rem; }
+        .ia-container p.desc {
+            text-align: center;
+            color: #718093;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
 
         .ia-upload-area {
             border: 2px dashed var(--primary-color);
@@ -101,19 +152,29 @@
             border-radius: 10px;
             background-color: #f9f9f9;
             margin-bottom: 1.5rem;
+            transition: background-color 0.3s;
         }
 
-        .ia-upload-area input { margin-top: 1rem; }
+        .ia-upload-area:hover {
+            background-color: #f0fdfd;
+        }
+
+        .ia-upload-area input {
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
 
         #status-ia {
             text-align: center;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             font-weight: bold;
             color: #ff9f43;
             display: none;
+            padding: 1rem;
+            border-radius: 5px;
+            background-color: #fff4e6;
         }
 
-        /* Área onde o modelo 3D vai aparecer */
         #visualizador-3d {
             width: 100%;
             height: 400px;
@@ -121,6 +182,7 @@
             border-radius: 10px;
             margin-top: 2rem;
             display: none;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
         }
 
         model-viewer {
@@ -129,29 +191,172 @@
             border-radius: 10px;
         }
 
-        /* Formulário de Orçamento (simplificado no CSS para caber) */
-        .secao-orcamento { background-color: var(--dark-color); padding: 4rem 2rem; color: white; border-top: 2px solid var(--primary-color); }
-        .form-container { max-width: 650px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); padding: 2.5rem; border-radius: 10px; border: 1px solid rgba(0, 229, 255, 0.2); }
-        .form-container h3 { text-align: center; font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--primary-color); }
-        .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; }
+        /* Catálogo de Peças */
+        .catalogo-container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .catalogo-container h3 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .catalogo-desc {
+            text-align: center;
+            color: #718093;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .grid-produtos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .card-produto {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #eee;
+        }
+
+        .card-produto:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-color: var(--primary-color);
+        }
+
+        .card-produto img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .card-info {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-info h4 { margin-bottom: 0.5rem; font-size: 1.3rem; color: var(--dark-color); }
+        .card-info p { color: #718093; margin-bottom: 1.5rem; flex-grow: 1; line-height: 1.5; }
+        
+        .card-info .tag {
+            display: inline-block;
+            background: var(--dark-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            align-self: flex-start;
+        }
+
+        /* Formulário de Orçamento */
+        .secao-orcamento {
+            background-color: var(--dark-color);
+            padding: 4rem 2rem;
+            color: white;
+            border-top: 2px solid var(--primary-color);
+        }
+
+        .form-container {
+            max-width: 650px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+
+        .form-container h3 {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
         .form-group label { margin-bottom: 0.5rem; font-weight: 600; color: #ccc; }
-        .form-group input, .form-group select, .form-group textarea { padding: 0.8rem; border: 1px solid #444; background-color: #1a1a1a; color: white; border-radius: 5px; font-size: 1rem; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-color); }
+        
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 0.8rem;
+            border: 1px solid #444;
+            background-color: #1a1a1a;
+            color: white;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(0, 229, 255, 0.3);
+        }
+
         .form-group textarea { resize: vertical; min-height: 120px; }
-        .btn-whatsapp { background-color: var(--success-color); color: white; width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 1rem; }
-        footer { background-color: #050505; color: #888; text-align: center; padding: 2rem; }
+
+        .btn-whatsapp {
+            background-color: var(--success-color);
+            color: white;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1rem;
+            padding: 1rem;
+        }
+
+        .btn-whatsapp:hover { background-color: #128C7E; color: white; box-shadow: none; }
+
+        footer {
+            background-color: #050505;
+            color: #888;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        footer strong { color: var(--primary-color); }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header { flex-direction: column; gap: 1rem; }
+            nav ul { flex-wrap: wrap; justify-content: center; gap: 1rem; }
+            .hero h2 { font-size: 2.2rem; }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <a href="#inicio">
-            <img src="C:\Users\Guilherme\Downloads\Criações MG\WhatsApp Image 2026-03-01 at 19.50.02.jpeg" alt="Logo MG FORMA 3D" class="logo-img">
+            <img src="logo.jpeg" alt="Logo MG FORMA 3D" class="logo-img">
         </a>
         <nav>
             <ul>
                 <li><a href="#inicio">Início</a></li>
                 <li><a href="#ia">Criar com IA</a></li>
+                <li><a href="#catalogo">Catálogo</a></li>
                 <li><a href="#orcamento" class="btn" style="padding: 0.4rem 1rem;">Orçamento</a></li>
             </ul>
         </nav>
@@ -160,40 +365,109 @@
     <section id="inicio" class="hero">
         <h2>Sua Ideia, Nossa Impressão</h2>
         <p>Serviços de impressão 3D em FDM com precisão. Agora com suporte à geração de modelos por Inteligência Artificial.</p>
+        <div style="display: flex; gap: 1rem;">
+            <a href="#ia" class="btn">Testar IA</a>
+            <a href="#catalogo" class="btn" style="background: transparent; border: 2px solid var(--primary-color); color: white;">Ver Catálogo</a>
+        </div>
     </section>
 
     <section id="ia" class="ia-container">
         <h3>Laboratório de IA (Hunyuan3D)</h3>
-        <p>Carregue uma fotografia e a nossa Inteligência Artificial criará um modelo 3D inicial para avaliar.</p>
+        <p class="desc">Carregue uma fotografia e a nossa Inteligência Artificial criará um modelo 3D inicial para avaliar.</p>
 
         <div class="ia-upload-area">
-            <p>Selecione uma imagem com fundo limpo para obter melhores resultados.</p>
+            <p>Selecione uma imagem (de preferência com fundo limpo) para obter melhores resultados.</p>
             <input type="file" id="imagemUpload" accept="image/png, image/jpeg, image/jpg">
             <br><br>
             <button class="btn" id="btnGerar" onclick="gerarModeloIA()">Transformar em 3D</button>
         </div>
 
         <div id="status-ia">
-            A comunicar com o servidor... Isto pode demorar alguns minutos dependendo da fila na Hugging Face.
+            A comunicar com o servidor... Isto pode demorar alguns minutos.
         </div>
 
         <div id="visualizador-3d">
             </div>
     </section>
 
+    <section id="catalogo" class="catalogo-container">
+        <h3>Catálogo de Peças</h3>
+        <p class="catalogo-desc">Confira alguns de nossos trabalhos. Fabricamos em peça única projetos com volume de até 220x220x250mm.</p>
+        
+        <div class="grid-produtos">
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/400x300?text=Suporte+Headset" alt="Suporte Headset">
+                <div class="card-info">
+                    <span class="tag">Decoração / Setup</span>
+                    <h4>Suporte para Headset</h4>
+                    <p>Organize seu setup com um suporte resistente e com design moderno. Disponível em várias cores.</p>
+                    <button class="btn" style="width: 100%; text-align: center;" onclick="selecionarProduto('Suporte para Headset', 'Decoração / Vaso')">Solicitar Modelo</button>
+                </div>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/400x300?text=Vaso+Decorativo" alt="Vaso Decorativo">
+                <div class="card-info">
+                    <span class="tag">Decoração / Vaso</span>
+                    <h4>Vaso Geométrico Low Poly</h4>
+                    <p>Vasos para suculentas e plantas pequenas com acabamento perfeito para decorar seu ambiente.</p>
+                    <button class="btn" style="width: 100%; text-align: center;" onclick="selecionarProduto('Vaso Geométrico Low Poly', 'Decoração / Vaso')">Solicitar Modelo</button>
+                </div>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/400x300?text=Engrenagem+PETG" alt="Peça Técnica">
+                <div class="card-info">
+                    <span class="tag">Peça Técnica / Reposição</span>
+                    <h4>Engrenagens e Suportes</h4>
+                    <p>Peças sob medida para reposição estrutural, impressas em materiais de alta resistência mecânica (PETG).</p>
+                    <button class="btn" style="width: 100%; text-align: center;" onclick="selecionarProduto('Engrenagem ou Peça Técnica de Reposição', 'Peça Técnica / Reposição')">Solicitar Modelo</button>
+                </div>
+            </div>
+
+            <div class="card-produto">
+                <img src="https://via.placeholder.com/400x300?text=Action+Figure" alt="Colecionáveis">
+                <div class="card-info">
+                    <span class="tag">Action Figure / Miniatura</span>
+                    <h4>Bustos e Miniaturas</h4>
+                    <p>Impressão de personagens, bustos e itens colecionáveis do seu jogo ou filme favorito.</p>
+                    <button class="btn" style="width: 100%; text-align: center;" onclick="selecionarProduto('Busto ou Miniatura Colecionável', 'Action Figure / Miniatura')">Solicitar Modelo</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="orcamento" class="secao-orcamento">
         <div class="form-container">
-            <h3>Faça o seu Orçamento</h3>
+            <h3>Faça seu Orçamento</h3>
+            <p style="text-align: center; margin-bottom: 2rem; color: #aaa;">Envie sua ideia e retornaremos com valores e prazos no seu WhatsApp.</p>
+            
             <form id="formOrcamento" onsubmit="enviarWhatsApp(event)">
                 <div class="form-group">
-                    <label for="nome">O seu Nome:</label>
-                    <input type="text" id="nome" required placeholder="Ex: João Silva">
+                    <label for="nome">Seu Nome:</label>
+                    <input type="text" id="nome" required placeholder="Ex: João da Silva">
                 </div>
+
+                <div class="form-group">
+                    <label for="tipo">Categoria do Projeto:</label>
+                    <select id="tipo" required>
+                        <option value="">Selecione a categoria...</option>
+                        <option value="Peça Técnica / Reposição">Peça Técnica / Reposição</option>
+                        <option value="Decoração / Vaso">Decoração / Vaso</option>
+                        <option value="Action Figure / Miniatura">Action Figure / Miniatura</option>
+                        <option value="Outro (Projeto Personalizado)">Outro (Projeto Personalizado)</option>
+                    </select>
+                </div>
+
                 <div class="form-group">
                     <label for="descricao">Detalhes do Pedido:</label>
-                    <textarea id="descricao" required placeholder="Se acabou de gerar um modelo com a IA, mencione aqui!"></textarea>
+                    <textarea id="descricao" required placeholder="Descreva a cor desejada, dimensões aproximadas ou se você acabou de gerar um modelo na nossa IA!"></textarea>
                 </div>
-                <button type="submit" class="btn btn-whatsapp">Enviar Mensagem</button>
+
+                <button type="submit" class="btn btn-whatsapp">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    Enviar Mensagem
+                </button>
             </form>
         </div>
     </section>
@@ -203,10 +477,10 @@
     </footer>
 
     <script type="module">
-        // Importa o cliente JavaScript oficial do Gradio via CDN
-        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+        // Importação do Gradio com o handle_file incluído
+        import { Client, handle_file } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
 
-        // Expõe a função para o botão conseguir aceder
+        // Função da IA exposta globalmente
         window.gerarModeloIA = async function() {
             const inputImagem = document.getElementById('imagemUpload');
             const statusDiv = document.getElementById('status-ia');
@@ -220,68 +494,78 @@
 
             const ficheiro = inputImagem.files[0];
 
-            // Atualiza a interface
+            // Atualiza a interface do utilizador
             btnGerar.disabled = true;
             btnGerar.innerText = "A Gerar...";
             statusDiv.style.display = "block";
+            statusDiv.innerText = "A conectar com a IA da Tencent... Pode demorar alguns minutos.";
+            statusDiv.style.backgroundColor = "#fff4e6";
+            statusDiv.style.color = "#ff9f43";
             visualizadorDiv.style.display = "none";
 
             try {
-                // 1. Liga à API pública do Hunyuan3D-2.1
+                // Conecta na API pública
                 const app = await Client.connect("tencent/Hunyuan3D-2.1");
 
-                // 2. Faz o pedido utilizando a estrutura de dados correta mapeada da sua imagem
+                // Faz o pedido empacotando o arquivo corretamente
                 const resultado = await app.predict("/generation_all", {
-                    image: ficheiro,        // Passamos o ficheiro diretamente aqui
-                    mv_image_front: null,   // null em vez do "None" do Python
+                    image: handle_file(ficheiro),
+                    mv_image_front: null,
                     mv_image_back: null,
                     mv_image_left: null,
                     mv_image_right: null,
-                    steps: null,
+                    steps: 30, 
                     guidance_scale: 30,
                     seed: 5,
-                    octree_resolution: 1234,
-                    check_box_rembg: true,  // Mudei para booleano para remoção de fundo
-                    num_chunks: true,
-                    randomize_seed: 8000
+                    octree_resolution: 256,
+                    check_box_rembg: true,
+                    num_chunks: 4,
+                    randomize_seed: true
                 });
 
                 console.log("Resposta da API:", resultado);
 
-                // A resposta geralmente é um array. Procuramos o URL do ficheiro .glb gerado.
-                // Ajuste dependendo da estrutura exata de retorno do endpoint
                 const urlModelo = resultado.data && resultado.data[0] ? resultado.data[0].url : null;
 
                 if (urlModelo) {
-                    statusDiv.innerText = "Modelo gerado com sucesso!";
-                    statusDiv.style.color = "#25D366";
-                    
-                    // Mostra o visualizador 3D com o ficheiro recebido
+                    statusDiv.innerText = "Modelo 3D gerado com sucesso! Gire o modelo abaixo.";
+                    statusDiv.style.color = "#155724";
+                    statusDiv.style.backgroundColor = "#d4edda";
                     visualizadorDiv.innerHTML = `<model-viewer src="${urlModelo}" auto-rotate camera-controls shadow-intensity="1"></model-viewer>`;
                     visualizadorDiv.style.display = "block";
                 } else {
-                    statusDiv.innerText = "Não foi possível extrair o ficheiro 3D da resposta.";
-                    statusDiv.style.color = "#ff4757";
+                    statusDiv.innerText = "A IA processou, mas não retornou o arquivo 3D.";
+                    statusDiv.style.color = "#721c24";
+                    statusDiv.style.backgroundColor = "#f8d7da";
                 }
 
             } catch (erro) {
-                console.error("Erro na API:", erro);
-                statusDiv.innerText = "Ocorreu um erro ao contactar o servidor ou a fila está cheia.";
-                statusDiv.style.color = "#ff4757";
+                console.error("ERRO COMPLETO DA API:", erro);
+                statusDiv.innerText = "Erro no servidor. Pressione F12 e veja a aba 'Console' para descobrir o motivo exato.";
+                statusDiv.style.color = "#721c24";
+                statusDiv.style.backgroundColor = "#f8d7da";
             } finally {
-                // Restaura o botão
                 btnGerar.disabled = false;
                 btnGerar.innerText = "Transformar em 3D";
             }
         };
 
-        // Função do WhatsApp
+        // Função para preencher catálogo
+        window.selecionarProduto = function(nomeProduto, categoria) {
+            document.getElementById('tipo').value = categoria;
+            document.getElementById('descricao').value = `Olá! Tenho interesse no modelo: ${nomeProduto}.\n\nGostaria de saber mais sobre cores disponíveis e valores.`;
+            document.getElementById('orcamento').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => { document.getElementById('nome').focus(); }, 800);
+        };
+
+        // Função de envio do WhatsApp
         window.enviarWhatsApp = function(event) {
             event.preventDefault();
-            const numeroWhatsApp = "5511999999999"; // O seu número aqui
+            const numeroWhatsApp = "5511999999999"; // Lembre-se de colocar seu número
             const nome = document.getElementById('nome').value;
+            const tipo = document.getElementById('tipo') ? document.getElementById('tipo').value : "Não especificado";
             const descricao = document.getElementById('descricao').value;
-            const mensagem = `*NOVO ORÇAMENTO - MG FORMA 3D*%0A%0A*Cliente:* ${nome}%0A*Detalhes:* ${descricao}`;
+            const mensagem = `*NOVO ORÇAMENTO - MG FORMA 3D*%0A%0A*Cliente:* ${nome}%0A*Categoria:* ${tipo}%0A*Detalhes:* ${descricao}`;
             window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagem}`, '_blank');
         };
     </script>
