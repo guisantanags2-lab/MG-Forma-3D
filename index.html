@@ -512,7 +512,7 @@
                     null,                   // 4. mv_image_back
                     null,                   // 5. mv_image_left
                     null,                   // 6. mv_image_right
-                    20,                     // 7. steps (REDUZIDO DE 50 PARA 20 AQUI)
+                    20,                     // 7. steps (REDUZIDO DE 50 PARA 20)
                     7.5,                    // 8. guidance_scale
                     1234,                   // 9. seed
                     256,                    // 10. octree_resolution
@@ -538,7 +538,6 @@
 
             } catch (erro) {
                 console.error("ERRO COMPLETO DA API:", erro);
-                // Extrai a mensagem de erro exata e joga na tela do site
                 let detalheErro = erro.message || JSON.stringify(erro, Object.getOwnPropertyNames(erro));
                 statusDiv.innerText = "Erro do Servidor: " + detalheErro;
                 statusDiv.style.color = "#721c24";
@@ -547,6 +546,8 @@
                 btnGerar.disabled = false;
                 btnGerar.innerText = "Transformar em 3D";
             }
+        };
+
         window.selecionarProduto = function(nomeProduto, categoria) {
             document.getElementById('tipo').value = categoria;
             document.getElementById('descricao').value = `Olá! Tenho interesse no modelo: ${nomeProduto}.\n\nGostaria de saber mais sobre cores disponíveis e valores.`;
@@ -566,6 +567,7 @@
     </script>
 </body>
 </html>
+
 
 
 
