@@ -477,10 +477,8 @@
     </footer>
 
     <script type="module">
-        // Importação do Gradio com o handle_file incluído
         import { Client, handle_file } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
 
-        // Função da IA exposta globalmente
         window.gerarModeloIA = async function() {
             const inputImagem = document.getElementById('imagemUpload');
             const statusDiv = document.getElementById('status-ia');
@@ -494,7 +492,6 @@
 
             const ficheiro = inputImagem.files[0];
 
-            // Atualiza a interface do utilizador
             btnGerar.disabled = true;
             btnGerar.innerText = "A Gerar...";
             statusDiv.style.display = "block";
@@ -504,24 +501,24 @@
             visualizadorDiv.style.display = "none";
 
             try {
-                // Conecta na API pública
+                // 1. Conecta na API pública
                 const app = await Client.connect("tencent/Hunyuan3D-2.1");
 
-                // Faz o pedido empacotando o arquivo corretamente
-                const resultado = await app.predict("/generation_all", {
-                    image: handle_file(ficheiro),
-                    mv_image_front: null,
-                    mv_image_back: null,
-                    mv_image_left: null,
-                    mv_image_right: null,
-                    steps: 30, 
-                    guidance_scale: 30,
-                    seed: 5,
-                    octree_resolution: 256,
-                    check_box_rembg: true,
-                    num_chunks: 4,
-                    randomize_seed: true
-                });
+                // 2. Faz o pedido enviando os dados como uma LISTA (Array), na ordem exata da API
+                const resultado = await app.predict("/generation_all", [
+                    handle_file(ficheiro), // image
+                    null,                  // mv_image_front
+                    null,                  // mv_image_back
+                    null,                  // mv_image_left
+                    null,                  // mv_image_right
+                    30,                    // steps
+                    30,                    // guidance_scale
+                    5,                     // seed
+                    256,                   // octree_resolution
+                    true,                  // check_box_rembg
+                    4,                     // num_chunks
+                    true                   // randomize_seed
+                ]);
 
                 console.log("Resposta da API:", resultado);
 
@@ -550,7 +547,6 @@
             }
         };
 
-        // Função para preencher catálogo
         window.selecionarProduto = function(nomeProduto, categoria) {
             document.getElementById('tipo').value = categoria;
             document.getElementById('descricao').value = `Olá! Tenho interesse no modelo: ${nomeProduto}.\n\nGostaria de saber mais sobre cores disponíveis e valores.`;
@@ -558,7 +554,6 @@
             setTimeout(() => { document.getElementById('nome').focus(); }, 800);
         };
 
-        // Função de envio do WhatsApp
         window.enviarWhatsApp = function(event) {
             event.preventDefault();
             const numeroWhatsApp = "5511999999999"; // Lembre-se de colocar seu número
@@ -571,3 +566,4 @@
     </script>
 </body>
 </html>
+
