@@ -501,27 +501,27 @@
             visualizadorDiv.style.display = "none";
 
             try {
-                // 1. Conecta na API pública
+                // Conecta na API pública
                 const app = await Client.connect("tencent/Hunyuan3D-2.1");
 
-                // 2. Faz o pedido enviando os dados como uma LISTA (Array), na ordem exata da API
+                // Faz o pedido com a ordem EXATA que o servidor Python deles espera
                 const resultado = await app.predict("/generation_all", [
-                    handle_file(ficheiro), // image
-                    null,                  // mv_image_front
-                    null,                  // mv_image_back
-                    null,                  // mv_image_left
-                    null,                  // mv_image_right
-                    30,                    // steps
-                    30,                    // guidance_scale
-                    5,                     // seed
-                    256,                   // octree_resolution
-                    true,                  // check_box_rembg
-                    4,                     // num_chunks
-                    true                   // randomize_seed
+                    null,                   // 1. caption (Texto descritivo - vazio)
+                    handle_file(ficheiro),  // 2. image (Sua foto)
+                    null,                   // 3. mv_image_front
+                    null,                   // 4. mv_image_back
+                    null,                   // 5. mv_image_left
+                    null,                   // 6. mv_image_right
+                    50,                     // 7. steps
+                    7.5,                    // 8. guidance_scale
+                    1234,                   // 9. seed
+                    256,                    // 10. octree_resolution
+                    true,                   // 11. check_box_rembg (remover fundo)
+                    4,                      // 12. num_chunks
+                    true                    // 13. randomize_seed
                 ]);
 
                 console.log("Resposta da API:", resultado);
-
                 const urlModelo = resultado.data && resultado.data[0] ? resultado.data[0].url : null;
 
                 if (urlModelo) {
@@ -538,7 +538,9 @@
 
             } catch (erro) {
                 console.error("ERRO COMPLETO DA API:", erro);
-                statusDiv.innerText = "Erro no servidor. Pressione F12 e veja a aba 'Console' para descobrir o motivo exato.";
+                // Extrai a mensagem de erro exata e joga na tela do site
+                let detalheErro = erro.message || JSON.stringify(erro, Object.getOwnPropertyNames(erro));
+                statusDiv.innerText = "Erro do Servidor: " + detalheErro;
                 statusDiv.style.color = "#721c24";
                 statusDiv.style.backgroundColor = "#f8d7da";
             } finally {
@@ -556,7 +558,7 @@
 
         window.enviarWhatsApp = function(event) {
             event.preventDefault();
-            const numeroWhatsApp = "5511999999999"; // Lembre-se de colocar seu número
+            const numeroWhatsApp = "5511999999999"; 
             const nome = document.getElementById('nome').value;
             const tipo = document.getElementById('tipo') ? document.getElementById('tipo').value : "Não especificado";
             const descricao = document.getElementById('descricao').value;
@@ -566,4 +568,5 @@
     </script>
 </body>
 </html>
+
 
