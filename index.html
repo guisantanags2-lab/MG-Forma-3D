@@ -504,19 +504,19 @@
                 // Conecta na API pública
                 const app = await Client.connect("tencent/Hunyuan3D-2.1");
 
-                // Faz o pedido com a ordem EXATA que o servidor Python deles espera
+               // Faz o pedido exigindo menos processamento da GPU (Steps reduzido para 20)
                 const resultado = await app.predict("/generation_all", [
-                    null,                   // 1. caption (Texto descritivo - vazio)
-                    handle_file(ficheiro),  // 2. image (Sua foto)
+                    null,                   // 1. caption
+                    handle_file(ficheiro),  // 2. image
                     null,                   // 3. mv_image_front
                     null,                   // 4. mv_image_back
                     null,                   // 5. mv_image_left
                     null,                   // 6. mv_image_right
-                    50,                     // 7. steps
+                    20,                     // 7. steps (REDUZIDO DE 50 PARA 20)
                     7.5,                    // 8. guidance_scale
                     1234,                   // 9. seed
                     256,                    // 10. octree_resolution
-                    true,                   // 11. check_box_rembg (remover fundo)
+                    true,                   // 11. check_box_rembg
                     4,                      // 12. num_chunks
                     true                    // 13. randomize_seed
                 ]);
@@ -568,5 +568,6 @@
     </script>
 </body>
 </html>
+
 
 
