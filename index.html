@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MG FORMA 3D - Impressão 3D e Modelagem</title>
+    
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            var(--primary-color): #00e5ff; 
+            --primary-color: #00e5ff;
+            --primary-hover: #00b8cc;
+            --dark-color: #0a0a0a;    
+            --light-color: #f5f6fa;
+            --text-color: #353b48;
+            --success-color: #25D366;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
+        body { background-color: var(--light-color); color: var(--text-color); }
+
+        header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .logo-img { height: 60px; width: auto; display: block; }
+
+        nav ul { list-style: none; display: flex; gap: 2rem; align-items: center; }
+        nav a { color: white; text-decoration: none; font-weight: 500; transition: color 0.3s; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        nav a:hover { color: var(--primary-color); }
+        
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.9)), url('https://via.placeholder.com/1200x600?text=MG+FORMA+3D') center/cover;
+            color: white;
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 5px solid var(--primary-color);
+        }
+
+        .hero h2 { font-size: 3rem; margin-bottom: 1rem; color: var(--primary-color); text-shadow: 0 0 10px rgba(0, 229, 255, 0.3); }
+        .hero p { font-size: 1.2rem; margin-bottom: 2.5rem; max-width: 600px; }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            padding: 0.8rem 2rem;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+
+        .btn:hover { background-color: var(--primary-hover); box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); }
+
+        /* NOVA SECÇÃO: Laboratório de IA */
+        .ia-container {
+            max-width: 900px;
+            margin: 4rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+
+        .ia-container h3 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .ia-container p { text-align: center; color: #718093; margin-bottom: 2rem; }
+
+        .ia-upload-area {
+            border: 2px dashed var(--primary-color);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            margin-bottom: 1.5rem;
+        }
+
+        .ia-upload-area input { margin-top: 1rem; }
+
+        #status-ia {
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: bold;
+            color: #ff9f43;
+            display: none;
+        }
+
+        /* Área onde o modelo 3D vai aparecer */
+        #visualizador-3d {
+            width: 100%;
+            height: 400px;
+            background-color: #e8eaed;
+            border-radius: 10px;
+            margin-top: 2rem;
+            display: none;
+        }
+
+        model-viewer {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        /* Formulário de Orçamento (simplificado no CSS para caber) */
+        .secao-orcamento { background-color: var(--dark-color); padding: 4rem 2rem; color: white; border-top: 2px solid var(--primary-color); }
+        .form-container { max-width: 650px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); padding: 2.5rem; border-radius: 10px; border: 1px solid rgba(0, 229, 255, 0.2); }
+        .form-container h3 { text-align: center; font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--primary-color); }
+        .form-group { margin-bottom: 1.5rem; display: flex; flex-direction: column; }
+        .form-group label { margin-bottom: 0.5rem; font-weight: 600; color: #ccc; }
+        .form-group input, .form-group select, .form-group textarea { padding: 0.8rem; border: 1px solid #444; background-color: #1a1a1a; color: white; border-radius: 5px; font-size: 1rem; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--primary-color); }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .btn-whatsapp { background-color: var(--success-color); color: white; width: 100%; display: flex; justify-content: center; align-items: center; gap: 10px; padding: 1rem; }
+        footer { background-color: #050505; color: #888; text-align: center; padding: 2rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#inicio">
+            <img src="C:\Users\Guilherme\Downloads\Criações MG\WhatsApp Image 2026-03-01 at 19.50.02.jpeg" alt="Logo MG FORMA 3D" class="logo-img">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Início</a></li>
+                <li><a href="#ia">Criar com IA</a></li>
+                <li><a href="#orcamento" class="btn" style="padding: 0.4rem 1rem;">Orçamento</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="inicio" class="hero">
+        <h2>Sua Ideia, Nossa Impressão</h2>
+        <p>Serviços de impressão 3D em FDM com precisão. Agora com suporte à geração de modelos por Inteligência Artificial.</p>
+    </section>
+
+    <section id="ia" class="ia-container">
+        <h3>Laboratório de IA (Hunyuan3D)</h3>
+        <p>Carregue uma fotografia e a nossa Inteligência Artificial criará um modelo 3D inicial para avaliar.</p>
+
+        <div class="ia-upload-area">
+            <p>Selecione uma imagem com fundo limpo para obter melhores resultados.</p>
+            <input type="file" id="imagemUpload" accept="image/png, image/jpeg, image/jpg">
+            <br><br>
+            <button class="btn" id="btnGerar" onclick="gerarModeloIA()">Transformar em 3D</button>
+        </div>
+
+        <div id="status-ia">
+            A comunicar com o servidor... Isto pode demorar alguns minutos dependendo da fila na Hugging Face.
+        </div>
+
+        <div id="visualizador-3d">
+            </div>
+    </section>
+
+    <section id="orcamento" class="secao-orcamento">
+        <div class="form-container">
+            <h3>Faça o seu Orçamento</h3>
+            <form id="formOrcamento" onsubmit="enviarWhatsApp(event)">
+                <div class="form-group">
+                    <label for="nome">O seu Nome:</label>
+                    <input type="text" id="nome" required placeholder="Ex: João Silva">
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Detalhes do Pedido:</label>
+                    <textarea id="descricao" required placeholder="Se acabou de gerar um modelo com a IA, mencione aqui!"></textarea>
+                </div>
+                <button type="submit" class="btn btn-whatsapp">Enviar Mensagem</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 <strong>MG FORMA 3D</strong>. Todos os direitos reservados.</p>
+    </footer>
+
+    <script type="module">
+        // Importa o cliente JavaScript oficial do Gradio via CDN
+        import { Client } from "https://cdn.jsdelivr.net/npm/@gradio/client/dist/index.min.js";
+
+        // Expõe a função para o botão conseguir aceder
+        window.gerarModeloIA = async function() {
+            const inputImagem = document.getElementById('imagemUpload');
+            const statusDiv = document.getElementById('status-ia');
+            const visualizadorDiv = document.getElementById('visualizador-3d');
+            const btnGerar = document.getElementById('btnGerar');
+
+            if (!inputImagem.files || inputImagem.files.length === 0) {
+                alert("Por favor, carregue uma imagem primeiro!");
+                return;
+            }
+
+            const ficheiro = inputImagem.files[0];
+
+            // Atualiza a interface
+            btnGerar.disabled = true;
+            btnGerar.innerText = "A Gerar...";
+            statusDiv.style.display = "block";
+            visualizadorDiv.style.display = "none";
+
+            try {
+                // 1. Liga à API pública do Hunyuan3D-2.1
+                const app = await Client.connect("tencent/Hunyuan3D-2.1");
+
+                // 2. Faz o pedido utilizando a estrutura de dados correta mapeada da sua imagem
+                const resultado = await app.predict("/generation_all", {
+                    image: ficheiro,        // Passamos o ficheiro diretamente aqui
+                    mv_image_front: null,   // null em vez do "None" do Python
+                    mv_image_back: null,
+                    mv_image_left: null,
+                    mv_image_right: null,
+                    steps: null,
+                    guidance_scale: 30,
+                    seed: 5,
+                    octree_resolution: 1234,
+                    check_box_rembg: true,  // Mudei para booleano para remoção de fundo
+                    num_chunks: true,
+                    randomize_seed: 8000
+                });
+
+                console.log("Resposta da API:", resultado);
+
+                // A resposta geralmente é um array. Procuramos o URL do ficheiro .glb gerado.
+                // Ajuste dependendo da estrutura exata de retorno do endpoint
+                const urlModelo = resultado.data && resultado.data[0] ? resultado.data[0].url : null;
+
+                if (urlModelo) {
+                    statusDiv.innerText = "Modelo gerado com sucesso!";
+                    statusDiv.style.color = "#25D366";
+                    
+                    // Mostra o visualizador 3D com o ficheiro recebido
+                    visualizadorDiv.innerHTML = `<model-viewer src="${urlModelo}" auto-rotate camera-controls shadow-intensity="1"></model-viewer>`;
+                    visualizadorDiv.style.display = "block";
+                } else {
+                    statusDiv.innerText = "Não foi possível extrair o ficheiro 3D da resposta.";
+                    statusDiv.style.color = "#ff4757";
+                }
+
+            } catch (erro) {
+                console.error("Erro na API:", erro);
+                statusDiv.innerText = "Ocorreu um erro ao contactar o servidor ou a fila está cheia.";
+                statusDiv.style.color = "#ff4757";
+            } finally {
+                // Restaura o botão
+                btnGerar.disabled = false;
+                btnGerar.innerText = "Transformar em 3D";
+            }
+        };
+
+        // Função do WhatsApp
+        window.enviarWhatsApp = function(event) {
+            event.preventDefault();
+            const numeroWhatsApp = "5511999999999"; // O seu número aqui
+            const nome = document.getElementById('nome').value;
+            const descricao = document.getElementById('descricao').value;
+            const mensagem = `*NOVO ORÇAMENTO - MG FORMA 3D*%0A%0A*Cliente:* ${nome}%0A*Detalhes:* ${descricao}`;
+            window.open(`https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${mensagem}`, '_blank');
+        };
+    </script>
+</body>
+</html>
